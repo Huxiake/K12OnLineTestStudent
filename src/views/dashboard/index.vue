@@ -13,7 +13,7 @@ export default {
   computed: {
     ...mapGetters([
       'name',
-      'roles'
+      'roles111'
     ])
   }
 }
