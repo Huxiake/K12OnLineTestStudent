@@ -8,12 +8,21 @@
     position: relative;
   }
 
+  .center-container {
+    transition: width 0.28s;
+    width: 66%;
+    height: calc(100vh - 50px);
+    // position: fixed;
+    margin: 10px auto;
+    z-index: 1001;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  }
   // 侧边栏 Sidebar container
   .sidebar-container {
     transition: width 0.28s;
     width: $sideBarWidth !important;
-    height: 100%;
-    position: fixed;
+    height: calc(100vh - 50px);
+    // position: fixed;
     font-size: 0px;
     top: 0;
     bottom: 0;

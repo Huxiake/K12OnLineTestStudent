@@ -1,21 +1,30 @@
 import request from '@/utils/request'
+import qs from 'qs'
 
-export function login(username, password) {
+export function login(loginName, password) {
+  const loginInfo = {
+    'loginName': loginName,
+    'password': password
+  }
+  const data = qs.stringify(loginInfo)
   return request({
-    url: '/user/login',
-    method: 'post',
-    data: {
-      username,
-      password
-    }
+    url: '/v1/login/studentPortal/web/login?' + data,
+    method: 'post'
   })
 }
 
-export function getInfo(token) {
+export function getLoginStatus() {
   return request({
-    url: '/user/info',
-    method: 'get',
-    params: { token }
+    url: '/v1/login/teacher/web/verify_login',
+    method: 'POST'
+  })
+}
+
+// 获取当前用户信息
+export function getLoginUser() {
+  return request({
+    url: 'v1/teacher/myCenter/getLoginUser',
+    method: 'get'
   })
 }
 
