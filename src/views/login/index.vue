@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <h3 class="title">多科共享实践案例教学信息平台</h3>
+      <h3 class="title">K12在线考试系统</h3>
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -25,45 +25,45 @@
       </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
-          登录
+          登 录
         </el-button>
       </el-form-item>
       <div class="tips">
-        <span style="margin-right:20px;"><a>注册</a></span>
-        <span><a>忘记密码</a></span>
+        <span style="margin-right:20px;">username: admin</span>
+        <span> password: admin</span>
       </div>
     </el-form>
   </div>
 </template>
 
 <script>
-// import { isvalidUsername } from '@/utils/validate'
+import { isvalidUsername } from '@/utils/validate'
 
 export default {
   name: 'Login',
   data() {
-    // const validateUsername = (rule, value, callback) => {
-    //   if (!isvalidUsername(value)) {
-    //     callback(new Error('请输入正确的用户名'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
-    // const validatePass = (rule, value, callback) => {
-    //   if (value.length < 5) {
-    //     callback(new Error('密码不能小于5位'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
+    const validateUsername = (rule, value, callback) => {
+      if (!isvalidUsername(value)) {
+        callback(new Error('请输入正确的用户名'))
+      } else {
+        callback()
+      }
+    }
+    const validatePass = (rule, value, callback) => {
+      if (value.length < 5) {
+        callback(new Error('密码不能小于5位'))
+      } else {
+        callback()
+      }
+    }
     return {
       loginForm: {
         username: '',
         password: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur' }],
-        password: [{ required: true, trigger: 'blur' }]
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePass }]
       },
       loading: false,
       pwdType: 'password',
@@ -90,12 +90,9 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then((response) => {
-            console.log('response')
-            console.log(response.cookies)
+          this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
-            // this.$router.push({ path: this.redirect || '/' })
-            this.$router.push('/')
+            this.$router.push({ path: this.redirect || '/' })
           }).catch(() => {
             this.loading = false
           })
@@ -104,14 +101,6 @@ export default {
           return false
         }
       })
-    },
-    handleLogin1() {
-      this.$refs.loginForm.validate(valid => {
-        this.loading = false
-        this.$store.dispatch('VerifyLogin').then(response => {
-          console.log(response)
-        })
-      })
     }
   }
 }
@@ -119,7 +108,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 $bg:#2d3a4b;
-$light_gray:#eee;
+$light_gray:#000;
 
 /* reset element-ui css */
 .login-container {
@@ -159,8 +148,9 @@ $light_gray:#eee;
   position: fixed;
   height: 100%;
   width: 100%;
-  background-image: ''
-  background-color: $bg;
+  background: url("../../assets/image/login-bg.jpg") no-repeat;
+  background-size: cover;
+  // background-color: $bg;
   .login-form {
     position: absolute;
     left: 0;
@@ -169,6 +159,12 @@ $light_gray:#eee;
     max-width: 100%;
     padding: 35px 35px 15px 35px;
     margin: 120px auto;
+    background: hsla(0,0%,100%,.25) border-box;
+    overflow: hidden;
+    border-radius: .3em;
+    box-shadow: 0 0 0 1px hsla(0,0%,100%,.3) inset,
+                0 .5em 1em rgba(0, 0, 0, 0.6);
+    text-shadow: 0 1px 1px hsla(0,0%,100%,.3);
   }
   .tips {
     font-size: 14px;
@@ -190,7 +186,7 @@ $light_gray:#eee;
   .title {
     font-size: 26px;
     font-weight: 400;
-    color: $light_gray;
+    color: #409eff;
     margin: 0px auto 40px auto;
     text-align: center;
     font-weight: bold;

@@ -1,25 +1,42 @@
 <template>
   <div class="card-container">
-    <el-card class="examCard" shadow="hover">
+    <el-card
+      v-for="(item, index) in exam"
+      :key="index"
+      class="examCard"
+      shadow="hover"
+      @click.native="item.isExam ? 0 : handleExam(item.id)">
       <div class="cardLeft">
-        <div class="examName">2019学年度期中考试</div>
+        <div class="examName">{{ item.name }}</div>
         <div class="examDate">
           <svg-icon icon-class="date"/>
-          <span>2019-05-01</span>
+          <span>{{ $moment(item.beginTime).format('YYYY-MM-DD') }}</span>
           <span>至</span>
-          <span>2019-05-08</span>
+          <span>{{ $moment(item.endTime).format('YYYY-MM-DD') }}</span>
         </div>
       </div>
-      <div class="cardRight">
+      <div v-if="!item.isExam" class="cardRight">
         <div class="examNum">
           <div>
-            <span style="color:#ff669b">20</span>
+            <span v-if="item.totalPeople < 10" style="color:#ff669b;margin-right: -9px;">0</span>
+            <span style="color:#ff669b">{{ item.totalPeople }}</span>
             <span>/</span>
-            <span style="color:#3888fa">55</span>
+            <span v-if="item.donePeople < 10" style="color:#3888fa;margin-right: -9px;">0</span>
+            <span style="color:#3888fa">{{ item.donePeople }}</span>
           </div>
           <div style="font-size: 12px;color: #707070">
             <span>已交卷</span>
             <span style="margin-left: 1em">考试人数</span>
+          </div>
+        </div>
+      </div>
+      <div v-if="item.isExam" class="cardRight">
+        <div class="examNum">
+          <div>
+            <div style="color:#73ae4f;margin:0 auto;width: 64px">{{ item.examGrade }}分</div>
+          </div>
+          <div style="font-size: 12px;color: #707070;">
+            <div style="width: 36px;margin: 0 auto">已交卷</div>
           </div>
         </div>
       </div>
@@ -29,10 +46,31 @@
 </template>
 
 <script>
+import { getExamList } from '@/api/exam'
+
 export default {
   data() {
     return {
-      test: ''
+      exam: []
+    }
+  },
+  created() {
+    this.examList()
+  },
+  methods: {
+    examList() {
+      getExamList().then(res => {
+        if (res.data.code === 0) {
+          this.exam = res.data.data.rows
+          console.log(this.exam)
+        }
+      })
+    },
+    handleExam(id) {
+      this.$router.push({
+        name: 'examdetails',
+        params: { id: id }
+      })
     }
   }
 }
@@ -59,6 +97,7 @@ export default {
       float: right;
       height: 60px;
       .examNum{
+        width: 120px;
         font-size: 30px;
       }
     }

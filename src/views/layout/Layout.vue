@@ -12,8 +12,10 @@
         <div class="info">
           <div class="infohead">
             <h1>
-              <span style="font-size: 26px;font-weight: 600;">孙悟空</span>
-              <span style="margin-left: 12px;font-size: 18px;color: #909399">菩提学院高级进阶班</span>
+              <span style="font-size: 26px;font-weight: 600;">{{ name }}</span>
+              <svg-icon v-if=" gender === 'woman'" icon-class="woman"/>
+              <svg-icon v-if=" gender === 'man'" icon-class="man"/>
+              <span style="margin-left: 2px;font-size: 18px;color: #909399">菩提学院高级进阶班</span>
             </h1>
           </div>
           <!-- <div class="infofoot">
@@ -22,7 +24,7 @@
       </div>
     </el-card>
     <div class="center-container">
-      <div class="navbar">
+      <div class="small-navbar">
         <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" router>
           <el-menu-item index="/student/exam">考试中心</el-menu-item>
           <el-menu-item index="/student/grade">成绩中心</el-menu-item>
@@ -36,6 +38,7 @@
 
 <script>
 import { Navbar, Sidebar, AppMain } from './components'
+import { mapGetters } from 'vuex'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
@@ -52,6 +55,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'name',
+      'gender'
+    ]),
     sidebar() {
       return this.$store.state.app.sidebar
     },
@@ -139,6 +146,12 @@ export default {
     font-size: 16px;
     border-bottom: 1px solid #f6f6f6;
   }
+  .small-navbar {
+    width:100%;
+    height: 50px;
+    font-size: 16px;
+    border-bottom: 1px solid #f6f6f6;
+  }
 </style>
 
 <style lang="scss">
@@ -146,6 +159,9 @@ export default {
     &:nth-child(1){
       padding: 0;
     }
+  }
+  .head {
+    background: url("../../assets/image/top-bg-img.jpg") no-repeat 50%;
   }
 </style>
 

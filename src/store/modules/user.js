@@ -1,11 +1,13 @@
 import { login, getLoginUser, getLoginStatus } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { Message } from 'element-ui'
 
 const user = {
   state: {
     token: getToken(),
     userId: '',
     name: '',
+    gender: '',
     avatar: '',
     roles: []
   },
@@ -16,6 +18,9 @@ const user = {
     },
     SET_NAME: (state, name) => {
       state.name = name
+    },
+    SET_GENDER: (state, gender) => {
+      state.gender = gender
     },
     SET_USERID: (state, userId) => {
       state.userId = userId
@@ -39,6 +44,13 @@ const user = {
             setToken('7681ea41')
             commit('SET_TOKEN', '7681ea41')
             resolve(response)
+          } else {
+            Message({
+              type: 'error',
+              message: data.errorMsg,
+              duration: 5 * 1000
+            })
+            reject()
           }
         }).catch(error => {
           reject(error)
@@ -53,6 +65,7 @@ const user = {
           if (response.data.errorMsg === '操作成功') {
             const data = response.data.data
             commit('SET_NAME', data.name)
+            commit('SET_GENDER', data.gender)
             commit('SET_USERID', data.id)
             commit('SET_AVATAR', data.headImg)
           }
